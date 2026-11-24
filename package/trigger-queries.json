@@ -1,0 +1,82 @@
+[
+  {
+    "query": "What does KU-RO mean in Linear A?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can you translate the Haghia Triada tablet HT 13?",
+    "should_trigger": true
+  },
+  {
+    "query": "Is Linear A deciphered yet?",
+    "should_trigger": true
+  },
+  {
+    "query": "Which Minoan words have been compared with Hebrew yayin?",
+    "should_trigger": true
+  },
+  {
+    "query": "Show me Linear A words that end in the sign TE",
+    "should_trigger": true
+  },
+  {
+    "query": "Who is JA-SA-SA-RA-ME on the libation tables?",
+    "should_trigger": true
+  },
+  {
+    "query": "What does the Linear A Lexicon say about the libation formula?",
+    "should_trigger": true
+  },
+  {
+    "query": "How is the Linear A sign AB08 read?",
+    "should_trigger": true
+  },
+  {
+    "query": "What language did the Minoans speak, according to linear-a.ai?",
+    "should_trigger": true
+  },
+  {
+    "query": "List the Linear A readings with the highest confidence tier",
+    "should_trigger": true
+  },
+  {
+    "query": "Translate this Linear B tablet from Pylos: PY Ta 641",
+    "should_trigger": false
+  },
+  {
+    "query": "What does the Phaistos Disc say?",
+    "should_trigger": false
+  },
+  {
+    "query": "Summarize the history of the Minoan palace at Knossos",
+    "should_trigger": false
+  },
+  {
+    "query": "What does the Hebrew word peten mean?",
+    "should_trigger": false
+  },
+  {
+    "query": "Explain how Michael Ventris deciphered Linear B",
+    "should_trigger": false
+  },
+  {
+    "query": "Write a Python function that tokenizes hyphenated strings",
+    "should_trigger": false
+  },
+  {
+    "query": "What is the Ugaritic word for wine?",
+    "should_trigger": false
+  },
+  {
+    "query": "Recommend a good book about Bronze Age Crete",
+    "should_trigger": false
+  },
+  {
+    "query": "What is the weather in Heraklion today?",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I read Egyptian hieroglyphs?",
+    "should_trigger": false
+  }
+]

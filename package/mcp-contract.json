@@ -1,0 +1,3942 @@
+{
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+    "tools": {}
+  },
+  "server": {
+    "name": "linear-a-lexicon",
+    "title": "Linear A Lexicon",
+    "version": "1.2.1"
+  },
+  "instructions": "Linear A Lexicon holds Tom di Mino’s proposed readings of Linear A as Minoan, an archaic Semitic language. Give each reading and translation as his proposal, with its tier, and name any rival mentioned. Confirmed fixes function, not etymology. Never invent a reading, translation or record; report not-found plainly. Named item: get_. Sets: list_/find_. Statistical tests: kernel_summary, run_*_kernel. Otherwise: search, then fetch. Cite each url.",
+  "tools": [
+    {
+      "name": "search",
+      "title": "Search the Linear A Lexicon",
+      "description": "Use this when you cannot name the record: an English meaning (wine), a scholar, a topic or an uncertain spelling, across the Lexicon and its wiki. Returns ids for fetch. Do not use for a word, name or document you can name exactly (get_word, get_name, get_text) or for filtered lists.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "A word, document number, name, root, meaning or scholar."
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            }
+          }
+        },
+        "required": [
+          "results"
+        ]
+      },
+      "annotations": {
+        "title": "Search the Linear A Lexicon",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "fetch",
+      "title": "Read a Linear A Lexicon record",
+      "description": "Use this when you need the full text of a search result. Long pages come in parts, and each part names the next id. Do not use to discover records.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 256,
+            "description": "An id from search, or the next id a part names."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai to cite."
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "tier": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Confirmed",
+                      "Probable",
+                      "Candidate",
+                      "Speculative"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "lexicon_version": {
+                "type": "string"
+              },
+              "license": {
+                "type": "string"
+              },
+              "part": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "parts": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "next_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "tier",
+              "lexicon_version",
+              "license",
+              "part",
+              "parts",
+              "next_id"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "text",
+          "url",
+          "metadata"
+        ]
+      },
+      "annotations": {
+        "title": "Read a Linear A Lexicon record",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "get_lexicon_overview",
+      "title": "About the Linear A Lexicon",
+      "description": "Use this when asked whether Linear A is deciphered, what the Lexicon is, what each confidence tier means, how to cite it, its licence, or what the latest release changed. Do not use for a single word, name or document.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai to cite."
+          },
+          "standing": {
+            "type": "string",
+            "description": "Where the reading of Linear A stands: what the Lexicon proposes, whose proposal it is, and how each reading is tiered."
+          },
+          "description": {
+            "type": "string"
+          },
+          "tiers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tier": {
+                  "type": "string",
+                  "enum": [
+                    "Confirmed",
+                    "Probable",
+                    "Candidate",
+                    "Speculative"
+                  ]
+                },
+                "meaning": {
+                  "type": "string"
+                },
+                "words": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "tier",
+                "meaning",
+                "words"
+              ]
+            }
+          },
+          "counts": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          },
+          "how_to_cite": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "lexicon_version": {
+            "type": "string"
+          },
+          "latest_release": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "changes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "url": {
+                    "type": "string",
+                    "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                    "description": "The page on linear-a.ai to cite."
+                  },
+                  "added": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ids": {
+                        "maxItems": 40,
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Their record ids (word:, root:, name:), each a value fetch accepts; the first 40 when there are more."
+                      }
+                    },
+                    "required": [
+                      "total",
+                      "ids"
+                    ],
+                    "description": "The words, roots and names the release added."
+                  },
+                  "revised": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ids": {
+                        "maxItems": 40,
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Their record ids (word:, root:, name:), each a value fetch accepts; the first 40 when there are more."
+                      }
+                    },
+                    "required": [
+                      "total",
+                      "ids"
+                    ],
+                    "description": "Those whose reading or meaning the release says it changed."
+                  },
+                  "augmented": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ids": {
+                        "maxItems": 40,
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Their record ids (word:, root:, name:), each a value fetch accepts; the first 40 when there are more."
+                      }
+                    },
+                    "required": [
+                      "total",
+                      "ids"
+                    ],
+                    "description": "Those whose evidence grew: a new attestation, comparison or source."
+                  }
+                },
+                "required": [
+                  "title",
+                  "changes",
+                  "url",
+                  "added",
+                  "revised",
+                  "augmented"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tool": {
+                  "type": "string",
+                  "enum": [
+                    "list_words",
+                    "list_texts",
+                    "list_names"
+                  ]
+                },
+                "field": {
+                  "type": "string",
+                  "enum": [
+                    "word_type",
+                    "language_family",
+                    "compared_with",
+                    "site",
+                    "first_proposed_by",
+                    "object",
+                    "scribe",
+                    "name_type",
+                    "language"
+                  ]
+                },
+                "total": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "values": {
+                  "maxItems": 12,
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "complete": {
+                  "type": "boolean",
+                  "description": "False when there are more values than are given here: list_values gives them all."
+                }
+              },
+              "required": [
+                "tool",
+                "field",
+                "total",
+                "values",
+                "complete"
+              ]
+            },
+            "description": "The values each filter of the list tools takes, the most used first. A filter takes a value as written here."
+          },
+          "read_more": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            },
+            "description": "Pages search does not return: the case for the reading, and the release notes. Pass an id to fetch."
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "standing",
+          "description",
+          "tiers",
+          "counts",
+          "how_to_cite",
+          "license",
+          "lexicon_version",
+          "latest_release",
+          "filters",
+          "read_more"
+        ]
+      },
+      "annotations": {
+        "title": "About the Linear A Lexicon",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "get_word",
+      "title": "Look up a Linear A word",
+      "description": "Use this when asked what a Linear A word means. Returns its proposed reading, confidence tier, first proposer, rival readings, comparisons, root and where it appears. Do not use for who a name refers to (get_name).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "word": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "The word in transliteration (KU-RO, *301), or a word: id from any result."
+          }
+        },
+        "required": [
+          "word"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "found",
+              "ambiguous",
+              "not_found"
+            ]
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                "description": "The page on linear-a.ai to cite."
+              },
+              "word": {
+                "type": "string"
+              },
+              "proposed_reading": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "proposed_meaning": {
+                "type": "string"
+              },
+              "tier": {
+                "type": "string",
+                "enum": [
+                  "Confirmed",
+                  "Probable",
+                  "Candidate",
+                  "Speculative"
+                ]
+              },
+              "tier_meaning": {
+                "type": "string",
+                "description": "What the tier claims. Confirmed fixes a word’s function, not its etymology."
+              },
+              "logogram": {
+                "type": "boolean",
+                "description": "True for a sign or sign group that stands for a word and has no sign-by-sign reading."
+              },
+              "first_proposed_by": {
+                "description": "The earliest proposer on record, with the work. Null when none is recorded: the reading is then the Lexicon’s own proposal.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "rivals": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "rival_reading": {
+                      "description": "The rival form, when the Lexicon records one apart from its sentence.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "statement": {
+                      "type": "string",
+                      "description": "The rival as the entry states it, in the entry’s own words."
+                    },
+                    "tagged": {
+                      "type": "boolean",
+                      "description": "True for a rival the Lexicon records as such; false for a sentence of the meaning or commentary that names one."
+                    }
+                  },
+                  "required": [
+                    "rival_reading",
+                    "statement",
+                    "tagged"
+                  ]
+                },
+                "description": "Every rival reading the entry names, the tagged ones first. An empty list means the entry names none, not that none exists."
+              },
+              "word_type": {
+                "type": "string"
+              },
+              "language_family": {
+                "type": "string"
+              },
+              "language_branch": {
+                "type": "string"
+              },
+              "signs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "roots": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "A root id for get_root, when the root is in the Lexicon.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "form": {
+                      "type": "string"
+                    },
+                    "root_meaning": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "form",
+                    "root_meaning"
+                  ]
+                }
+              },
+              "compared_forms": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "language": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "language",
+                    "text"
+                  ]
+                }
+              },
+              "commentary": {
+                "type": "string"
+              },
+              "commentary_cut": {
+                "type": "boolean",
+                "description": "True when the commentary is longer than this record holds; fetch the id for all of it."
+              },
+              "appears_in": {
+                "type": "object",
+                "properties": {
+                  "total": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "documents": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                          "description": "The page on linear-a.ai to cite."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "url"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "total",
+                  "documents"
+                ],
+                "description": "The first documents and the total. For every document of a word with its line, use list_occurrences."
+              },
+              "same_spelling": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                      "description": "The page on linear-a.ai to cite."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "url"
+                  ]
+                },
+                "description": "Other records written with the same signs."
+              },
+              "name_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "The ids of the names this word is read in, for get_name; its own spelling first."
+              },
+              "signs_unicode": {
+                "description": "The signs in Linear A’s own characters (Unicode), in order. Null where a sign has no character.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "cite": {
+                "type": "string",
+                "description": "How to cite this record: the author, the record, the edition and the address."
+              },
+              "suggest_revision_url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/github\\.com\\/plasma-ai\\/kaphtor\\/",
+                "description": "Where a reader proposes a correction."
+              }
+            },
+            "required": [
+              "id",
+              "url",
+              "word",
+              "proposed_reading",
+              "proposed_meaning",
+              "tier",
+              "tier_meaning",
+              "logogram",
+              "first_proposed_by",
+              "rivals",
+              "word_type",
+              "language_family",
+              "language_branch",
+              "signs",
+              "roots",
+              "compared_forms",
+              "commentary",
+              "commentary_cut",
+              "appears_in",
+              "same_spelling",
+              "name_ids",
+              "signs_unicode",
+              "cite",
+              "suggest_revision_url"
+            ]
+          },
+          "candidates": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Pass this id to the same tool as it stands."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "distinguishing": {
+                  "type": "string",
+                  "description": "The one fact that tells this record from the others."
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "distinguishing",
+                "url"
+              ]
+            }
+          },
+          "suggestions": {
+            "description": "The nearest records by name. None of them is the answer.",
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            }
+          },
+          "use_tool": {
+            "description": "Set when another tool holds what was asked for.",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "enum": [
+                  "search",
+                  "fetch",
+                  "get_lexicon_overview",
+                  "get_word",
+                  "get_name",
+                  "get_text",
+                  "get_root",
+                  "get_sign",
+                  "list_words",
+                  "list_texts",
+                  "list_names",
+                  "find_words_compared_with",
+                  "find_words_by_signs"
+                ]
+              },
+              "arguments": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "tool",
+              "arguments",
+              "reason"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "status"
+        ]
+      },
+      "annotations": {
+        "title": "Look up a Linear A word",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "get_name",
+      "title": "Look up a Linear A name",
+      "description": "Use this when asked who or what a Linear A name is: a person, place, god or title, with its proposed reading, type and language, each with a tier. Do not use for common words.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "The name in transliteration (DA-KU-SE-NE), or a name: id from any result."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "found",
+              "ambiguous",
+              "not_found"
+            ]
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                "description": "The page on linear-a.ai to cite."
+              },
+              "name": {
+                "type": "string"
+              },
+              "proposed_reading": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "proposed_meaning": {
+                "type": "string"
+              },
+              "name_type": {
+                "type": "string"
+              },
+              "name_type_tier": {
+                "type": "string",
+                "enum": [
+                  "Confirmed",
+                  "Probable",
+                  "Candidate",
+                  "Speculative"
+                ]
+              },
+              "name_type_tier_meaning": {
+                "type": "string",
+                "description": "What the tier says of the name’s type."
+              },
+              "language": {
+                "type": "string"
+              },
+              "language_tier": {
+                "type": "string",
+                "enum": [
+                  "Confirmed",
+                  "Probable",
+                  "Candidate",
+                  "Speculative"
+                ]
+              },
+              "language_tier_meaning": {
+                "type": "string",
+                "description": "What the tier says of the language the name is assigned to."
+              },
+              "first_proposed_by": {
+                "description": "The earliest proposer on record, with the work. Null when none is recorded: the reading is then the Lexicon’s own proposal.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "sites": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "appears_in": {
+                "type": "object",
+                "properties": {
+                  "total": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "documents": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                          "description": "The page on linear-a.ai to cite."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "url"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "total",
+                  "documents"
+                ],
+                "description": "The first documents and the total. For every document of a word with its line, use list_occurrences."
+              },
+              "word_id": {
+                "description": "The id of the lexicon word this name is read with, for get_word.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "rivals": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "rival_reading": {
+                      "description": "The rival form, when the Lexicon records one apart from its sentence.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "statement": {
+                      "type": "string",
+                      "description": "The rival as the entry states it, in the entry’s own words."
+                    },
+                    "tagged": {
+                      "type": "boolean",
+                      "description": "True for a rival the Lexicon records as such; false for a sentence of the meaning or commentary that names one."
+                    }
+                  },
+                  "required": [
+                    "rival_reading",
+                    "statement",
+                    "tagged"
+                  ]
+                },
+                "description": "Every rival reading the entry names, the tagged ones first. An empty list means the entry names none, not that none exists."
+              },
+              "contact": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "commentary": {
+                "type": "string"
+              },
+              "commentary_cut": {
+                "type": "boolean",
+                "description": "True when the commentary is longer than this record holds; fetch the id for all of it."
+              },
+              "signs_unicode": {
+                "description": "The signs in Linear A’s own characters (Unicode), in order. Null where a sign has no character.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "cite": {
+                "type": "string",
+                "description": "How to cite this record: the author, the record, the edition and the address."
+              },
+              "suggest_revision_url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/github\\.com\\/plasma-ai\\/kaphtor\\/",
+                "description": "Where a reader proposes a correction."
+              }
+            },
+            "required": [
+              "id",
+              "url",
+              "name",
+              "proposed_reading",
+              "proposed_meaning",
+              "name_type",
+              "name_type_tier",
+              "name_type_tier_meaning",
+              "language",
+              "language_tier",
+              "language_tier_meaning",
+              "first_proposed_by",
+              "sites",
+              "appears_in",
+              "word_id",
+              "rivals",
+              "contact",
+              "commentary",
+              "commentary_cut",
+              "signs_unicode",
+              "cite",
+              "suggest_revision_url"
+            ]
+          },
+          "candidates": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Pass this id to the same tool as it stands."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "distinguishing": {
+                  "type": "string",
+                  "description": "The one fact that tells this record from the others."
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "distinguishing",
+                "url"
+              ]
+            }
+          },
+          "suggestions": {
+            "description": "The nearest records by name. None of them is the answer.",
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            }
+          },
+          "use_tool": {
+            "description": "Set when another tool holds what was asked for.",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "enum": [
+                  "search",
+                  "fetch",
+                  "get_lexicon_overview",
+                  "get_word",
+                  "get_name",
+                  "get_text",
+                  "get_root",
+                  "get_sign",
+                  "list_words",
+                  "list_texts",
+                  "list_names",
+                  "find_words_compared_with",
+                  "find_words_by_signs"
+                ]
+              },
+              "arguments": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "tool",
+              "arguments",
+              "reason"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "status"
+        ]
+      },
+      "annotations": {
+        "title": "Look up a Linear A name",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "get_text",
+      "title": "Read a Linear A document",
+      "description": "Use this when asked to read or translate one Linear A document by its number (HT 13, IO Za 2). Returns the transliteration, the proposed translation and its tier, word glosses and scribes. Linear A only: Linear B tablets and the Phaistos Disc are not in the corpus. Do not use to find documents.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "The document number (HT 13, HT13a, IO Za 2), or a text: id from any result."
+          }
+        },
+        "required": [
+          "number"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "found",
+              "ambiguous",
+              "not_found"
+            ]
+          },
+          "documents": {
+            "description": "One document, or each face of one object (HT 11 is HT 11a and HT 11b).",
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The value get_text accepts for this document."
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "site": {
+                  "type": "string"
+                },
+                "object": {
+                  "type": "string"
+                },
+                "period": {
+                  "type": "string"
+                },
+                "findspot": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "scribes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Each is a value list_texts accepts as scribe."
+                },
+                "transliteration": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "One string for each line of the document. Empty when withheld, or when the document has no line."
+                },
+                "transliteration_withheld": {
+                  "type": "boolean",
+                  "description": "True when the transliteration is left out under its source’s terms; the page at url shows it."
+                },
+                "proposed_translation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "tier": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "Confirmed",
+                        "Probable",
+                        "Candidate",
+                        "Speculative"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "tier_meaning": {
+                  "description": "What the tier claims; null when the document has no translation and so no tier.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "translation_complete": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "word_glosses": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "word": {
+                        "type": "string"
+                      },
+                      "proposed_reading": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "proposed_meaning": {
+                        "type": "string"
+                      },
+                      "tier": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "Confirmed",
+                              "Probable",
+                              "Candidate",
+                              "Speculative"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "word",
+                      "proposed_reading",
+                      "proposed_meaning",
+                      "tier"
+                    ]
+                  },
+                  "description": "The words the translation glosses. In the document’s order, but where the transliteration is withheld: there each word once, in alphabetical order."
+                },
+                "signs_unicode": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "One string for each line of the document, in Linear A’s own characters (Unicode). Empty when the transliteration is withheld, or when the document has none."
+                },
+                "inscription": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                          "description": "The page on linear-a.ai to cite."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "url"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "The document’s object carved again in 3D: the record fetch reads, and the page that shows it. Null when the object has no model."
+                },
+                "license_note": {
+                  "type": "string"
+                },
+                "cite": {
+                  "type": "string",
+                  "description": "How to cite this record: the author, the record, the edition and the address."
+                },
+                "suggest_revision_url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/github\\.com\\/plasma-ai\\/kaphtor\\/",
+                  "description": "Where a reader proposes a correction."
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "title",
+                "site",
+                "object",
+                "period",
+                "findspot",
+                "scribes",
+                "transliteration",
+                "transliteration_withheld",
+                "proposed_translation",
+                "tier",
+                "tier_meaning",
+                "translation_complete",
+                "word_glosses",
+                "signs_unicode",
+                "inscription",
+                "license_note",
+                "cite",
+                "suggest_revision_url"
+              ]
+            }
+          },
+          "candidates": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Pass this id to the same tool as it stands."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "distinguishing": {
+                  "type": "string",
+                  "description": "The one fact that tells this record from the others."
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "distinguishing",
+                "url"
+              ]
+            }
+          },
+          "suggestions": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            }
+          },
+          "use_tool": {
+            "description": "Set when another tool holds what was asked for.",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "enum": [
+                  "search",
+                  "fetch",
+                  "get_lexicon_overview",
+                  "get_word",
+                  "get_name",
+                  "get_text",
+                  "get_root",
+                  "get_sign",
+                  "list_words",
+                  "list_texts",
+                  "list_names",
+                  "find_words_compared_with",
+                  "find_words_by_signs"
+                ]
+              },
+              "arguments": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "tool",
+              "arguments",
+              "reason"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "status"
+        ]
+      },
+      "annotations": {
+        "title": "Read a Linear A document",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "get_root",
+      "title": "Look up a Proto-Semitic root in the Linear A Lexicon",
+      "description": "Use this when asked about a reconstructed Proto-Semitic root (y-š-r, *kʷall-): its meaning, its descendant forms in each Semitic language, and the Linear A readings built on it. Do not use for a Linear A word.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "root": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "The root as written (y-š-r, *kʷall-), or a root id from another result."
+          }
+        },
+        "required": [
+          "root"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "found",
+              "ambiguous",
+              "not_found"
+            ]
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                "description": "The page on linear-a.ai to cite."
+              },
+              "reconstruction": {
+                "type": "string"
+              },
+              "other_notation": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "meaning": {
+                "type": "string"
+              },
+              "author_gloss": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "basis": {
+                "type": "string"
+              },
+              "descendants": {
+                "type": "object",
+                "properties": {
+                  "total": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "languages": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "forms": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "language": {
+                          "type": "string"
+                        },
+                        "branch": {
+                          "type": "string"
+                        },
+                        "form": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "sources": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "language",
+                        "branch",
+                        "form",
+                        "sources"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "total",
+                  "languages",
+                  "forms"
+                ],
+                "description": "Descendant forms by language. A form is null where its text is withheld."
+              },
+              "linear_a_words": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "proposed_reading": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "tier": {
+                      "type": "string",
+                      "enum": [
+                        "Confirmed",
+                        "Probable",
+                        "Candidate",
+                        "Speculative"
+                      ]
+                    },
+                    "url": {
+                      "type": "string",
+                      "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                      "description": "The page on linear-a.ai to cite."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "proposed_reading",
+                    "tier",
+                    "url"
+                  ]
+                }
+              },
+              "notes": {
+                "type": "string"
+              },
+              "cite": {
+                "type": "string",
+                "description": "How to cite this record: the author, the record, the edition and the address."
+              }
+            },
+            "required": [
+              "id",
+              "url",
+              "reconstruction",
+              "other_notation",
+              "meaning",
+              "author_gloss",
+              "basis",
+              "descendants",
+              "linear_a_words",
+              "notes",
+              "cite"
+            ]
+          },
+          "candidates": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Pass this id to the same tool as it stands."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "distinguishing": {
+                  "type": "string",
+                  "description": "The one fact that tells this record from the others."
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "distinguishing",
+                "url"
+              ]
+            }
+          },
+          "suggestions": {
+            "description": "The nearest records by name. None of them is the answer.",
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            }
+          },
+          "use_tool": {
+            "description": "Set when another tool holds what was asked for.",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "enum": [
+                  "search",
+                  "fetch",
+                  "get_lexicon_overview",
+                  "get_word",
+                  "get_name",
+                  "get_text",
+                  "get_root",
+                  "get_sign",
+                  "list_words",
+                  "list_texts",
+                  "list_names",
+                  "find_words_compared_with",
+                  "find_words_by_signs"
+                ]
+              },
+              "arguments": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "tool",
+              "arguments",
+              "reason"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "status"
+        ]
+      },
+      "annotations": {
+        "title": "Look up a Proto-Semitic root in the Linear A Lexicon",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "get_sign",
+      "title": "Look up a Linear A sign",
+      "description": "Use this when asked how one Linear A sign is read (AB08, KU) and which words use it. Do not use for sequences of signs, or for what a logogram means (*301, VIN): use get_word.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sign": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16,
+            "description": "One sign: its number (AB08, *301) or its transliteration (KU)."
+          }
+        },
+        "required": [
+          "sign"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "found",
+              "ambiguous",
+              "not_found"
+            ]
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                "description": "The page on linear-a.ai to cite."
+              },
+              "code": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string",
+                "description": "The transliteration, not a proven sound."
+              },
+              "label": {
+                "type": "string"
+              },
+              "glyph": {
+                "type": "string"
+              },
+              "proposed_sound_value": {
+                "description": "The sound the Lexicon proposes for a sign the convention leaves without one. A proposal; null for most signs.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "words": {
+                "type": "object",
+                "properties": {
+                  "total": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "entries": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "proposed_reading": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "tier": {
+                          "type": "string",
+                          "enum": [
+                            "Confirmed",
+                            "Probable",
+                            "Candidate",
+                            "Speculative"
+                          ]
+                        },
+                        "url": {
+                          "type": "string",
+                          "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                          "description": "The page on linear-a.ai to cite."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "proposed_reading",
+                        "tier",
+                        "url"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "total",
+                  "entries"
+                ]
+              },
+              "cite": {
+                "type": "string",
+                "description": "How to cite this record: the author, the record, the edition and the address."
+              }
+            },
+            "required": [
+              "id",
+              "url",
+              "code",
+              "value",
+              "label",
+              "glyph",
+              "proposed_sound_value",
+              "words",
+              "cite"
+            ]
+          },
+          "candidates": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Pass this id to the same tool as it stands."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "distinguishing": {
+                  "type": "string",
+                  "description": "The one fact that tells this record from the others."
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "distinguishing",
+                "url"
+              ]
+            }
+          },
+          "suggestions": {
+            "description": "The nearest records by name. None of them is the answer.",
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            }
+          },
+          "use_tool": {
+            "description": "Set when another tool holds what was asked for.",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "enum": [
+                  "search",
+                  "fetch",
+                  "get_lexicon_overview",
+                  "get_word",
+                  "get_name",
+                  "get_text",
+                  "get_root",
+                  "get_sign",
+                  "list_words",
+                  "list_texts",
+                  "list_names",
+                  "find_words_compared_with",
+                  "find_words_by_signs"
+                ]
+              },
+              "arguments": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "tool",
+              "arguments",
+              "reason"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "status"
+        ]
+      },
+      "annotations": {
+        "title": "Look up a Linear A sign",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_words",
+      "title": "List Linear A Lexicon words",
+      "description": "Use this when asked for a set of Lexicon words by confidence tier, word type (commodity, ritual), language family, a language they are compared with (Hebrew, Ugaritic), find-site, first proposer or frequency. Do not use for one word, spelling patterns, or people, places and gods (list_names).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tier": {
+            "description": "Omit unless the user names a tier.",
+            "type": "string",
+            "enum": [
+              "Confirmed",
+              "Probable",
+              "Candidate",
+              "Speculative"
+            ]
+          },
+          "word_type": {
+            "description": "Omit unless the user names one: Commodity, Administrative, Ritual, Personnel, Vessel.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "language_family": {
+            "description": "The layer a reading belongs to (Semitic, Hurrian). Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "compared_with": {
+            "description": "A language the words are compared with (Hebrew, Ugaritic, Akkadian). Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "site": {
+            "description": "A find-site (Haghia Triada, Zakros). Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "first_proposed_by": {
+            "description": "A scholar (Gordon). Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 64
+          },
+          "min_occurrences": {
+            "description": "Omit unless the user asks for frequent words.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          },
+          "text": {
+            "description": "Words whose reading or meaning contains this. Omit unless needed.",
+            "type": "string",
+            "maxLength": 64
+          },
+          "page": {
+            "description": "Page of results, from 1. Omit for the first page.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "page": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "rows": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "proposed_reading": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "proposed_meaning": {
+                  "type": "string"
+                },
+                "tier": {
+                  "type": "string",
+                  "enum": [
+                    "Confirmed",
+                    "Probable",
+                    "Candidate",
+                    "Speculative"
+                  ]
+                },
+                "word_type": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "proposed_reading",
+                "proposed_meaning",
+                "tier",
+                "word_type",
+                "url"
+              ]
+            }
+          },
+          "totals_without": {
+            "description": "Only when total is 0: the count with each filter left out in turn.",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          },
+          "unknown_filter": {
+            "description": "Set when a filter value is not one the Lexicon uses.",
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "closest": {
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "field",
+              "closest"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "total",
+          "page",
+          "pages",
+          "rows"
+        ]
+      },
+      "annotations": {
+        "title": "List Linear A Lexicon words",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_texts",
+      "title": "List Linear A documents",
+      "description": "Use this when asked for Linear A documents by site, object (tablet, roundel, vessel), scribe, whether a translation exists, or a word or meaning they contain. Do not use to read one document.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "site": {
+            "description": "A find-site. Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "object": {
+            "description": "Tablet, roundel, nodule, vessel. Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "scribe": {
+            "description": "A scribe as an edition names one (HT 9, scribe 9). Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "has_translation": {
+            "description": "Omit unless the user asks for translated or untranslated documents.",
+            "type": "boolean"
+          },
+          "text": {
+            "description": "Documents whose words or translation contain this (wine, KU-RO). Omit unless needed.",
+            "type": "string",
+            "maxLength": 64
+          },
+          "page": {
+            "description": "Page of results, from 1. Omit for the first page.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "page": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "rows": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "site": {
+                  "type": "string"
+                },
+                "object": {
+                  "type": "string"
+                },
+                "scribes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "has_translation": {
+                  "type": "boolean"
+                },
+                "tier": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "Confirmed",
+                        "Probable",
+                        "Candidate",
+                        "Speculative"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "site",
+                "object",
+                "scribes",
+                "has_translation",
+                "tier",
+                "url"
+              ]
+            }
+          },
+          "totals_without": {
+            "description": "Only when total is 0: the count with each filter left out in turn.",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          },
+          "unknown_filter": {
+            "description": "Set when a filter value is not one the Lexicon uses.",
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "closest": {
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "field",
+              "closest"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "total",
+          "page",
+          "pages",
+          "rows"
+        ]
+      },
+      "annotations": {
+        "title": "List Linear A documents",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_names",
+      "title": "List Linear A names",
+      "description": "Use this when asked for Linear A names of people, places, gods or titles, by type, language or site. Do not use for one name (get_name) or for common words (list_words).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name_type": {
+            "description": "Personal name, Place, God or goddess, Title, Gentilic. Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "language": {
+            "description": "The language a name is assigned to (Semitic, Hurrian). Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "site": {
+            "description": "A find-site. Omit unless the user names one.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "text": {
+            "description": "Names whose reading or meaning contains this. Omit unless needed.",
+            "type": "string",
+            "maxLength": 64
+          },
+          "page": {
+            "description": "Page of results, from 1. Omit for the first page.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "page": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "rows": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "proposed_reading": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "proposed_meaning": {
+                  "type": "string"
+                },
+                "name_type": {
+                  "type": "string"
+                },
+                "name_type_tier": {
+                  "type": "string",
+                  "enum": [
+                    "Confirmed",
+                    "Probable",
+                    "Candidate",
+                    "Speculative"
+                  ]
+                },
+                "language": {
+                  "type": "string"
+                },
+                "language_tier": {
+                  "type": "string",
+                  "enum": [
+                    "Confirmed",
+                    "Probable",
+                    "Candidate",
+                    "Speculative"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "proposed_reading",
+                "proposed_meaning",
+                "name_type",
+                "name_type_tier",
+                "language",
+                "language_tier",
+                "url"
+              ]
+            }
+          },
+          "totals_without": {
+            "description": "Only when total is 0: the count with each filter left out in turn.",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          },
+          "unknown_filter": {
+            "description": "Set when a filter value is not one the Lexicon uses.",
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "closest": {
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "field",
+              "closest"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "total",
+          "page",
+          "pages",
+          "rows"
+        ]
+      },
+      "annotations": {
+        "title": "List Linear A names",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "find_words_compared_with",
+      "title": "Find Linear A words compared with a form",
+      "description": "Use this when given a word from another language (Hebrew peten, פתן, Ugaritic bṯn) and asked which Linear A words are compared with it. Do not use for Linear A spellings or English meanings; for every word compared with a language, use list_words.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "form": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "The word, in its own script or in transliteration."
+          },
+          "language": {
+            "description": "Its language, as the user names it (Hebrew). Omit when unknown.",
+            "type": "string",
+            "maxLength": 48
+          },
+          "page": {
+            "description": "Page of results, from 1. Omit for the first page.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          }
+        },
+        "required": [
+          "form"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "page": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "language_ignored": {
+            "type": "boolean",
+            "description": "True when nothing matched in the named language and the search ran again without it."
+          },
+          "matches": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "proposed_reading": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "proposed_meaning": {
+                  "type": "string"
+                },
+                "tier": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "Confirmed",
+                        "Probable",
+                        "Candidate",
+                        "Speculative"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "matched": {
+                  "type": "object",
+                  "properties": {
+                    "language": {
+                      "type": "string"
+                    },
+                    "form": {
+                      "type": "string"
+                    },
+                    "gloss": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "language",
+                    "form",
+                    "gloss"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "proposed_reading",
+                "proposed_meaning",
+                "tier",
+                "matched",
+                "url"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "total",
+          "page",
+          "pages",
+          "language_ignored",
+          "matches"
+        ]
+      },
+      "annotations": {
+        "title": "Find Linear A words compared with a form",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "find_words_by_signs",
+      "title": "Find Linear A words by their signs",
+      "description": "Use this when asked for Linear A words by spelling: starting with, ending with or containing given signs, or a pattern with unknown signs (A-?-RA). Do not use for meanings.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "signs": {
+            "anyOf": [
+              {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 16
+                }
+              },
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 96
+              }
+            ],
+            "description": "The signs in order, as a list ([\"A\",\"?\",\"RA\"]) or one hyphenated word (A-?-RA). \"?\" is one unknown sign."
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "start",
+              "end",
+              "anywhere",
+              "whole"
+            ],
+            "description": "Where the signs stand in the word. \"whole\" matches the whole word."
+          },
+          "page": {
+            "description": "Page of results, from 1. Omit for the first page.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          }
+        },
+        "required": [
+          "signs",
+          "position"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "page": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pattern": {
+            "description": "The signs searched for, as read. Null when one of them is no sign a listed word form is spelt with.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "matches": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "word": {
+                  "type": "string"
+                },
+                "occurrences": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "id": {
+                  "description": "The word’s id for get_word, or a name’s id (name:…) for get_name; null when the Lexicon proposes no reading.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "proposed_reading": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "tier": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "Confirmed",
+                        "Probable",
+                        "Candidate",
+                        "Speculative"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "documents": {
+                  "maxItems": 5,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string",
+                        "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                        "description": "The page on linear-a.ai to cite."
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "title",
+                      "url"
+                    ]
+                  }
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "word",
+                "occurrences",
+                "id",
+                "proposed_reading",
+                "tier",
+                "documents",
+                "url"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "total",
+          "page",
+          "pages",
+          "pattern",
+          "matches"
+        ]
+      },
+      "annotations": {
+        "title": "Find Linear A words by their signs",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_occurrences",
+      "title": "List where a Linear A word occurs",
+      "description": "Use this when asked for every place a Linear A word appears: each document with the line the word stands in and its proposed gloss there. Do not use for what the word means (get_word), for names (get_name) or to find words by spelling (find_words_by_signs).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "word": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "The word in transliteration (KU-RO), or a word: id from any result."
+          },
+          "page": {
+            "description": "Page of results, from 1. Omit for the first page.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          }
+        },
+        "required": [
+          "word"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "found",
+              "ambiguous",
+              "not_found"
+            ]
+          },
+          "word": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "proposed_reading": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "tier": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Confirmed",
+                      "Probable",
+                      "Candidate",
+                      "Speculative"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "proposed_reading",
+              "tier"
+            ]
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "page": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "withheld": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "How many of all the lines are left out under their source’s terms."
+          },
+          "occurrences": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "document": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                      "description": "The page on linear-a.ai to cite."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "url"
+                  ]
+                },
+                "site": {
+                  "type": "string"
+                },
+                "line": {
+                  "description": "The line of the document the word stands in, in transliteration. Null when withheld, or when no line is recorded.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "line_withheld": {
+                  "type": "boolean",
+                  "description": "True when the line is left out under its source’s terms; the document’s page shows it."
+                },
+                "proposed_gloss": {
+                  "description": "What the word is proposed to mean in this line.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "document",
+                "site",
+                "line",
+                "line_withheld",
+                "proposed_gloss"
+              ]
+            }
+          },
+          "candidates": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Pass this id to the same tool as it stands."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "distinguishing": {
+                  "type": "string",
+                  "description": "The one fact that tells this record from the others."
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "distinguishing",
+                "url"
+              ]
+            }
+          },
+          "suggestions": {
+            "description": "The nearest records by name. None of them is the answer.",
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+                  "description": "The page on linear-a.ai to cite."
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "url"
+              ]
+            }
+          },
+          "use_tool": {
+            "description": "Set when another tool holds what was asked for.",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "enum": [
+                  "search",
+                  "fetch",
+                  "get_lexicon_overview",
+                  "get_word",
+                  "get_name",
+                  "get_text",
+                  "get_root",
+                  "get_sign",
+                  "list_words",
+                  "list_texts",
+                  "list_names",
+                  "find_words_compared_with",
+                  "find_words_by_signs"
+                ]
+              },
+              "arguments": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "tool",
+              "arguments",
+              "reason"
+            ]
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "status",
+          "total",
+          "page",
+          "pages",
+          "withheld",
+          "occurrences"
+        ]
+      },
+      "annotations": {
+        "title": "List where a Linear A word occurs",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_values",
+      "title": "List the values a Linear A Lexicon filter takes",
+      "description": "Use this when you need the values a list filter takes, before filtering by one the Lexicon may not use: each word type, language family, compared language, site, first proposer, object, scribe, name type or language, with its count. Do not use for the records themselves (list_words, list_texts, list_names).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "enum": [
+              "list_words",
+              "list_texts",
+              "list_names"
+            ],
+            "description": "The list tool the filter belongs to."
+          },
+          "field": {
+            "type": "string",
+            "enum": [
+              "word_type",
+              "language_family",
+              "compared_with",
+              "site",
+              "first_proposed_by",
+              "object",
+              "scribe",
+              "name_type",
+              "language"
+            ],
+            "description": "The filter, by its name in that tool’s input."
+          }
+        },
+        "required": [
+          "tool",
+          "field"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "tool": {
+            "type": "string",
+            "enum": [
+              "list_words",
+              "list_texts",
+              "list_names"
+            ]
+          },
+          "field": {
+            "type": "string",
+            "enum": [
+              "word_type",
+              "language_family",
+              "compared_with",
+              "site",
+              "first_proposed_by",
+              "object",
+              "scribe",
+              "name_type",
+              "language"
+            ]
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Pass it to the filter as written."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "value",
+                "count"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "tool",
+          "field",
+          "total",
+          "values"
+        ]
+      },
+      "annotations": {
+        "title": "List the values a Linear A Lexicon filter takes",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "kernel_summary",
+      "title": "Get the Linear A probabilistic kernel scoreboard",
+      "description": "Use this when asked for the signed ten-kernel (Kernels A–J) probabilistic language-identification scoreboard, calibration gates, and permutation p-values. Do not use for individual word lookups (get_word).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "signed_date": {
+            "type": "string"
+          },
+          "joint_primary_stouffer_z": {
+            "type": "number"
+          },
+          "joint_primary_p": {
+            "type": "number"
+          },
+          "live_endpoints": {
+            "type": "object",
+            "properties": {
+              "anchors": {
+                "type": "string"
+              },
+              "ligatures": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "anchors",
+              "ligatures"
+            ]
+          },
+          "kernels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "winner": {
+                  "type": "string"
+                },
+                "metric": {
+                  "type": "string"
+                },
+                "z_perm": {
+                  "type": "number"
+                },
+                "p_perm": {
+                  "type": "number"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "role",
+                "winner",
+                "metric",
+                "z_perm",
+                "p_perm",
+                "note"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "signed_date",
+          "joint_primary_stouffer_z",
+          "joint_primary_p",
+          "live_endpoints",
+          "kernels"
+        ]
+      },
+      "annotations": {
+        "title": "Get the Linear A probabilistic kernel scoreboard",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "run_anchor_kernel",
+      "title": "Run the live Kernel D pre-linguistic anchor permutation test",
+      "description": "Use this when asked to run live consonant-grid permutations on Linear A pre-linguistic anchors or the Linear B calibration control (subset=linear_b_cal), with optional drop ablations. Do not use for word glosses (get_word).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "subset": {
+            "description": "Which anchor set to test (default: full_8). Use linear_b_cal to run the Linear B Greek calibration gate live.",
+            "type": "string",
+            "enum": [
+              "full_8",
+              "drop_3_trade_loans",
+              "arithmetic_only_2",
+              "linear_b_cal"
+            ]
+          },
+          "drop": {
+            "description": "Optional comma-separated anchor words to drop for custom leave-any-out ablation (e.g. KU-RO,A-KA-NU).",
+            "type": "string",
+            "maxLength": 128
+          },
+          "perms": {
+            "description": "Number of consonant-series grid permutations (100–10000, default 1000).",
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 10000
+          },
+          "seed": {
+            "description": "Deterministic PRNG seed (default 20261122).",
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "beta": {
+            "description": "Inverse-temperature sharpness parameter (default 6.0).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "subset": {
+            "type": "string"
+          },
+          "n_anchors": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "perms": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "beta": {
+            "type": "number"
+          },
+          "winner": {
+            "type": "string"
+          },
+          "runner_up": {
+            "type": "string"
+          },
+          "delta_ll": {
+            "type": "number"
+          },
+          "bayes_factor_vs_runner_up": {
+            "type": "number"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "language": {
+                  "type": "string"
+                },
+                "ll": {
+                  "type": "number"
+                },
+                "perm_mean": {
+                  "type": "number"
+                },
+                "z_perm": {
+                  "type": "number"
+                },
+                "p_perm": {
+                  "type": "number"
+                },
+                "anchors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "word": {
+                        "type": "string"
+                      },
+                      "concept": {
+                        "type": "string"
+                      },
+                      "best_match": {
+                        "type": "string"
+                      },
+                      "best_dist": {
+                        "type": "number"
+                      },
+                      "ll": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "word",
+                      "concept",
+                      "best_match",
+                      "best_dist",
+                      "ll"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "language",
+                "ll",
+                "perm_mean",
+                "z_perm",
+                "p_perm",
+                "anchors"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "subset",
+          "n_anchors",
+          "perms",
+          "seed",
+          "beta",
+          "winner",
+          "runner_up",
+          "delta_ll",
+          "bayes_factor_vs_runner_up",
+          "languages"
+        ]
+      },
+      "annotations": {
+        "title": "Run the live Kernel D pre-linguistic anchor permutation test",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "run_ligature_kernel",
+      "title": "Run the live Kernel F commodity ligature acrophony test",
+      "description": "Use this when asked to run live consonant-grid permutations on Linear A commodity ligature adjuncts (GRA/OLE/VIN) or the Linear B calibration gate (target=linear_b_cal). Do not use for sign lookups (get_sign).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "description": "Target ligature set: linear_a (default) or linear_b_cal (Greek calibration control).",
+            "type": "string",
+            "enum": [
+              "linear_a",
+              "linear_b_cal"
+            ]
+          },
+          "perms": {
+            "description": "Number of consonant-series grid permutations (100–10000, default 1000).",
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 10000
+          },
+          "seed": {
+            "description": "Deterministic PRNG seed (default 20261122).",
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "beta": {
+            "description": "Inverse-temperature sharpness parameter (default 6.0).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "One to three lines that can be repeated as they stand. They name each reading as a proposal and give its tier."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/linear-a\\.ai\\/",
+            "description": "The page on linear-a.ai that shows this record, list or search."
+          },
+          "target": {
+            "type": "string"
+          },
+          "n_ligatures": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "perms": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "beta": {
+            "type": "number"
+          },
+          "winner": {
+            "type": "string"
+          },
+          "runner_up": {
+            "type": "string"
+          },
+          "delta_ll": {
+            "type": "number"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "language": {
+                  "type": "string"
+                },
+                "ll": {
+                  "type": "number"
+                },
+                "perm_mean": {
+                  "type": "number"
+                },
+                "z_perm": {
+                  "type": "number"
+                },
+                "p_perm": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "language",
+                "ll",
+                "perm_mean",
+                "z_perm",
+                "p_perm"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "url",
+          "target",
+          "n_ligatures",
+          "perms",
+          "seed",
+          "beta",
+          "winner",
+          "runner_up",
+          "delta_ll",
+          "languages"
+        ]
+      },
+      "annotations": {
+        "title": "Run the live Kernel F commodity ligature acrophony test",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "_meta": {
+        "securitySchemes": [
+          {
+            "type": "noauth"
+          }
+        ]
+      }
+    }
+  ]
+}

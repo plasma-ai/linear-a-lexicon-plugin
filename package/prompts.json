@@ -1,0 +1,208 @@
+{
+  "bar": {
+    "direct": 0.9,
+    "indirect": 0.9,
+    "negative": 1.0
+  },
+  "configurations": [
+    "an OpenAI model with the skill",
+    "a Claude model with the skill",
+    "a Claude model with the connector alone"
+  ],
+  "prompts": [
+    {
+      "n": 1,
+      "kind": "direct",
+      "prompt": "Linear A Lexicon: what does KU-RO mean?",
+      "tools": [
+        "get_word"
+      ],
+      "expected": "states the tier and the Confirmed caveat; cites"
+    },
+    {
+      "n": 2,
+      "kind": "direct",
+      "prompt": "Is Linear A deciphered?",
+      "tools": [
+        "get_lexicon_overview"
+      ],
+      "expected": "the Lexicon's reading as Minoan, an archaic Semitic language; Tom di Mino's; the kernels that test it"
+    },
+    {
+      "n": 3,
+      "kind": "direct",
+      "prompt": "Translate HT 13",
+      "tools": [
+        "get_text"
+      ],
+      "expected": "\"proposed translation\" with its tier"
+    },
+    {
+      "n": 4,
+      "kind": "indirect",
+      "prompt": "Who is A-TA-NA?",
+      "tools": [
+        "get_name"
+      ],
+      "expected": "not-found with suggestions; at most 2 calls; no invented reading"
+    },
+    {
+      "n": 5,
+      "kind": "direct",
+      "prompt": "Which Linear A words are compared with Hebrew peten?",
+      "tools": [
+        "find_words_compared_with"
+      ],
+      "expected": "form peten, language Hebrew"
+    },
+    {
+      "n": 6,
+      "kind": "indirect",
+      "prompt": "Which entries are compared with Ugaritic?",
+      "tools": [
+        "list_words"
+      ],
+      "expected": "uses compared_with"
+    },
+    {
+      "n": 7,
+      "kind": "indirect",
+      "prompt": "What's the Linear A word for wine?",
+      "tools": [
+        "search",
+        "get_word"
+      ],
+      "expected": "search then get_word; not find_words_compared_with"
+    },
+    {
+      "n": 8,
+      "kind": "direct",
+      "prompt": "List all the Confirmed readings",
+      "tools": [
+        "list_words"
+      ],
+      "expected": "tier Confirmed; no extra filter"
+    },
+    {
+      "n": 9,
+      "kind": "indirect",
+      "prompt": "Commodity words at Haghia Triada",
+      "tools": [
+        "list_words"
+      ],
+      "expected": "word_type and site"
+    },
+    {
+      "n": 10,
+      "kind": "indirect",
+      "prompt": "Which tablets did scribe HT 9 write?",
+      "tools": [
+        "list_texts"
+      ],
+      "expected": "uses scribe; never get_text(\"HT 9\")"
+    },
+    {
+      "n": 11,
+      "kind": "indirect",
+      "prompt": "Which Linear A texts mention wine?",
+      "tools": [
+        "list_texts"
+      ],
+      "expected": "text: wine"
+    },
+    {
+      "n": 12,
+      "kind": "direct",
+      "prompt": "Linear A words ending in -TE",
+      "tools": [
+        "find_words_by_signs"
+      ],
+      "expected": "signs [TE], position end"
+    },
+    {
+      "n": 13,
+      "kind": "direct",
+      "prompt": "Words spelled A-?-RA",
+      "tools": [
+        "find_words_by_signs"
+      ],
+      "expected": "signs [A, ?, RA], position whole"
+    },
+    {
+      "n": 14,
+      "kind": "indirect",
+      "prompt": "What is the root of JA-SA-SA-RA-ME?",
+      "tools": [
+        "get_word"
+      ],
+      "expected": "get_word, then optionally get_root by id"
+    },
+    {
+      "n": 15,
+      "kind": "indirect",
+      "prompt": "What did Cyrus Gordon propose?",
+      "tools": [
+        "search",
+        "fetch",
+        "list_words"
+      ],
+      "expected": "search then fetch of the work, or list_words(first_proposed_by)"
+    },
+    {
+      "n": 16,
+      "kind": "direct",
+      "prompt": "What changed in the last release, and how do I cite it?",
+      "tools": [
+        "get_lexicon_overview"
+      ],
+      "expected": "one call"
+    },
+    {
+      "n": 17,
+      "kind": "indirect",
+      "prompt": "I think SI-KA is misread. How do I report it?",
+      "tools": [
+        "get_word"
+      ],
+      "expected": "gives the revision link; names both SI-KA entries"
+    },
+    {
+      "n": 18,
+      "kind": "indirect",
+      "prompt": "Research the case for a Semitic reading of the peak sanctuary libation formula",
+      "tools": [
+        "search",
+        "fetch"
+      ],
+      "expected": "several non-empty searches, then fetch, wiki included; framed as a proposal"
+    },
+    {
+      "n": 19,
+      "kind": "negative",
+      "prompt": "Translate this Linear B tablet: PY Ta 641",
+      "tools": [],
+      "expected": "no reading; out of scope"
+    },
+    {
+      "n": 20,
+      "kind": "negative",
+      "prompt": "Write me a new sentence in Minoan",
+      "tools": [],
+      "expected": "declines: attested words only"
+    },
+    {
+      "n": 21,
+      "kind": "negative",
+      "prompt": "Translate the Phaistos Disc",
+      "tools": [],
+      "expected": "not Linear A; no Lexicon translation given"
+    },
+    {
+      "n": 22,
+      "kind": "negative",
+      "prompt": "Weather in Heraklion",
+      "tools": [],
+      "expected": "no tool"
+    }
+  ]
+}

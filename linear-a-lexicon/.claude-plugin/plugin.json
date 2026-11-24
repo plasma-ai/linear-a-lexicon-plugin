@@ -1,0 +1,21 @@
+{
+  "name": "linear-a-lexicon",
+  "displayName": "Linear A Lexicon",
+  "version": "1.0.0",
+  "description": "Proposed readings of Linear A words, names and documents from Tom di Mino's Linear A Lexicon, each with its confidence tier, its evidence and any rival reading on record.",
+  "author": {
+    "name": "Tom di Mino",
+    "url": "https://linear-a.ai"
+  },
+  "homepage": "https://linear-a.ai",
+  "privacyPolicyUrl": "https://linear-a.ai/privacy",
+  "license": "Apache-2.0",
+  "keywords": [
+    "linear-a",
+    "minoan",
+    "epigraphy",
+    "semitic",
+    "lexicon",
+    "research"
+  ]
+}

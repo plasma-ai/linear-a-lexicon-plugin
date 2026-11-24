@@ -1,0 +1,95 @@
+{
+  "name": "Linear A Lexicon",
+  "slug": "linear-a-lexicon",
+  "publisher": "Tom di Mino",
+  "server": "https://mcp.linear-a.ai/mcp",
+  "website": "https://linear-a.ai",
+  "documentation": "https://linear-a.ai/developers",
+  "support": "https://linear-a.ai/support",
+  "privacy": "https://linear-a.ai/privacy",
+  "terms": "https://linear-a.ai/terms",
+  "limits": {
+    "openai.shortDescription": 30,
+    "anthropic.oneLiner": 200,
+    "anthropic.description": 2000,
+    "skill.description": 1024,
+    "skill.name": 64,
+    "readme.minWords": 40
+  },
+  "openai": {
+    "shortDescription": "Proposed readings of Linear A",
+    "longDescription": "The Linear A Lexicon (linear-a.ai) holds Tom di Mino's proposed readings of Linear A, the script of Minoan Crete, as an archaic Semitic language. Ask what a Linear A word is proposed to mean, who or what a name refers to, how a tablet or libation table reads, which words are compared with a Hebrew, Ugaritic or Akkadian form, or which words are spelt with given signs.\n\nEvery reading here is Tom di Mino's proposal, and every result says so: each reading comes with a confidence tier (Confirmed, Probable, Candidate or Speculative) and what that tier means, the scholar who first proposed it where one is on record, and any rival reading the entry marks. Each result links to the page on linear-a.ai that shows the same record, so a claim can be checked.\n\nLimitations: it covers Linear A only, not Linear B, Cretan Hieroglyphic or the Phaistos Disc. It reads the published Lexicon and changes nothing. It gives the readings on record and composes no new Minoan text. Some transliterations are given by link to the site and not in the result.",
+    "category": "Education & Research",
+    "capabilities": [
+      "Look up a word's proposed reading and tier",
+      "Look up a name",
+      "Read a document with its proposed translation",
+      "Look up a Proto-Semitic root",
+      "Look up a sign",
+      "List words, names and documents by filter",
+      "Find words compared with a form",
+      "Find words by their signs",
+      "Search the Lexicon and its wiki"
+    ]
+  },
+  "anthropic": {
+    "oneLiner": "Look up Tom di Mino's proposed readings of Linear A words, names and documents, each with its confidence tier, its evidence and any rival reading on record, from the Linear A Lexicon.",
+    "description": "The Linear A Lexicon (linear-a.ai) holds Tom di Mino's proposed readings of Linear A, the script of Minoan Crete, as an archaic Semitic language. Ask what a Linear A word is proposed to mean, who or what a name refers to, how a tablet or libation table reads, which words are compared with a Hebrew, Ugaritic or Akkadian form, or which words are spelt with given signs.\n\nEvery reading here is Tom di Mino's proposal, and every result says so: each reading comes with a confidence tier (Confirmed, Probable, Candidate or Speculative) and what that tier means, the scholar who first proposed it where one is on record, and any rival reading the entry marks. Each result links to the page on linear-a.ai that shows the same record, so a claim can be checked.\n\nLimitations: it covers Linear A only, not Linear B, Cretan Hieroglyphic or the Phaistos Disc. It reads the published Lexicon and changes nothing. It gives the readings on record and composes no new Minoan text. Some transliterations are given by link to the site and not in the result.",
+    "categories": [
+      "Education",
+      "Research"
+    ],
+    "authentication": "none",
+    "access": "read only"
+  },
+  "examples": [
+    {
+      "prompt": "Linear A Lexicon: what does KU-RO mean?",
+      "tool": "get_word",
+      "checks": "A word looked up by its transliteration is given as a proposal with its tier.",
+      "expected": "Gives the proposed reading kull, 'total, sum', as a proposal, with its tier Confirmed and the caveat that Confirmed fixes the word's function and not its etymology, the first proposer on record, any rival reading the entry marks, and the linear-a.ai link."
+    },
+    {
+      "prompt": "Translate the Linear A tablet HT 13.",
+      "tool": "get_text",
+      "checks": "A document is read with its proposed translation and a link to its page.",
+      "expected": "Gives the transliteration where the edition serves it or the link to the site's page where it does not, and the translation as a proposed translation with its tier, and links the document's page."
+    },
+    {
+      "prompt": "Which Linear A words are compared with Hebrew peten?",
+      "tool": "find_words_compared_with",
+      "checks": "Words compared with a Semitic form are listed as the Lexicon's comparisons.",
+      "expected": "Lists the Lexicon's words compared with that form, each with its proposed reading and tier, presented as the Lexicon's comparisons, with links."
+    },
+    {
+      "prompt": "Which Linear A words end in TE?",
+      "tool": "find_words_by_signs",
+      "checks": "Words are found by the signs they end in.",
+      "expected": "Lists word forms of the corpus ending in the sign TE, the most attested first, with the count, and says which forms were not searched if the result says so."
+    },
+    {
+      "prompt": "List the Confirmed readings in the Linear A Lexicon.",
+      "tool": "list_words",
+      "checks": "Words are listed by confidence tier, with what the tier means.",
+      "expected": "Lists the words whose tier is Confirmed, with each proposed reading and meaning, states what Confirmed means, and links the list."
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "Translate this Linear B tablet: PY Ta 641.",
+      "reason": "Linear B is outside the Lexicon, which covers Linear A only.",
+      "expected": "Gives no Lexicon reading for the tablet and says the Lexicon covers Linear A only."
+    },
+    {
+      "prompt": "Write me a new sentence in Minoan.",
+      "reason": "The Lexicon holds proposed readings of attested words; it composes nothing, and a new sentence would present invention as the record.",
+      "expected": "Declines to compose Minoan text; may offer the attested words and their proposed readings."
+    },
+    {
+      "prompt": "What is the weather in Heraklion today?",
+      "reason": "No tool gives weather; all eighteen read the Lexicon.",
+      "expected": "No Linear A Lexicon tool is called."
+    }
+  ],
+  "releaseNotes": "Initial release: eighteen read-only tools over the Linear A Lexicon's words, names, documents, roots, signs, bibliography, wiki and statistical tests."
+}
