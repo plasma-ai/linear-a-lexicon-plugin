@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "linear-a-lexicon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Proposed readings of Linear A words, names and documents from Tom di Mino's Linear A Lexicon, each with its confidence tier, its evidence and any rival reading on record.",
   "author": {
     "name": "Tom di Mino",
