@@ -27,7 +27,7 @@ The user's instructions override this skill whenever they differ.
 | for words by spelling: beginning, ending, containing, or a pattern like A-?-RA | `find_words_by_signs` |
 | for every place a word appears, each with its line | `list_occurrences` |
 | which values a list filter takes (the scribes, the sites, the compared languages) | `list_values` |
-| how the statistical tests of the language stand: the ten kernels, their calibration gates and p-values | `kernel_summary` |
+| how the statistical tests of the language stand: the twelve kernels, their calibration gates and p-values | `kernel_summary` |
 | to run the anchor permutation test, or its Linear B control | `run_anchor_kernel` |
 | to run the commodity-ligature test, or its Linear B control | `run_ligature_kernel` |
 | anything else: an English meaning, a scholar, a topic | `search`, then `fetch` the ids worth reading |

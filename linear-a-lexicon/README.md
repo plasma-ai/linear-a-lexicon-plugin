@@ -4,8 +4,9 @@ Look up Tom di Mino's proposed readings of Linear A, the script of Minoan Crete,
 The plugin pairs the Linear A Lexicon's public MCP server with a skill that tells the model how to
 give a reading: as a proposal, with its confidence tier, and beside any rival reading on record.
 
-The Lexicon reads Linear A as Minoan, an archaic Semitic language. Ten signed probabilistic kernels
-test that reading, and nine rank Semitic first.
+The Lexicon reads Linear A as Minoan, an archaic Semitic language. Twelve signed probabilistic kernels
+test that reading. Of the eleven that rank languages, ten rank Semitic first; the twelfth is a stress test of
+the others.
 
 ## Use it
 

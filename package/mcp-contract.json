@@ -6,7 +6,7 @@
   "server": {
     "name": "linear-a-lexicon",
     "title": "Linear A Lexicon",
-    "version": "1.2.1"
+    "version": "1.2.2"
   },
   "instructions": "Linear A Lexicon holds Tom di Mino’s proposed readings of Linear A as Minoan, an archaic Semitic language. Give each reading and translation as his proposal, with its tier, and name any rival mentioned. Confirmed fixes function, not etymology. Never invent a reading, translation or record; report not-found plainly. Named item: get_. Sets: list_/find_. Statistical tests: kernel_summary, run_*_kernel. Otherwise: search, then fetch. Cite each url.",
   "tools": [
@@ -3510,7 +3510,7 @@
     {
       "name": "kernel_summary",
       "title": "Get the Linear A probabilistic kernel scoreboard",
-      "description": "Use this when asked for the signed ten-kernel (Kernels A–J) probabilistic language-identification scoreboard, calibration gates, and permutation p-values. Do not use for individual word lookups (get_word).",
+      "description": "Use this when asked for the signed twelve-kernel (Kernels A–L) probabilistic language-identification scoreboard, calibration gates, backward-projection audits, and permutation p-values. Do not use for individual word lookups (get_word).",
       "inputSchema": {
         "type": "object",
         "properties": {},
