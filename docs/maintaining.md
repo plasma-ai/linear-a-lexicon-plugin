@@ -15,7 +15,8 @@ every Monday and on request.
 When it reports a difference:
 
 1. Copy the server's new answers: `python3 package/check_contract.py --print > package/mcp-contract.json`.
-2. For a new tool, add a row to the table in the skill. For a removed tool, delete its row.
+2. For a new tool, add a row to the table in the skill and to the table in [submitting.md](submitting.md). For
+   a removed tool, delete its rows.
 3. If the number of tools changed, correct it in the three places that state it: `TOOLS` in
    `tests/test_plugin.py`, and the two listing strings that spell the number out (the weather case's reason and
    the release notes), each of which is repeated in `plugin.json`.

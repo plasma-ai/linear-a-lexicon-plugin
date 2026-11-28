@@ -50,3 +50,5 @@ Run from the repository root.
   before changing any description, example or the skill's frontmatter.
 - [docs/maintaining.md](docs/maintaining.md): what to do when the server's tools change, how a release is made,
   and what the golden prompts and trigger queries are for. Read before a version bump or a contract update.
+- [docs/submitting.md](docs/submitting.md): the steps of each directory's submission, the justification of the
+  tool hints, and what the server receives. Read before submitting or answering a reviewer.
